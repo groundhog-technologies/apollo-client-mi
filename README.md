@@ -6,5 +6,5 @@ Following example returns an [apollo-client](https://github.com/apollographql/ap
 ```js
 import ApolloClient from 'mi-client';
 const GRAPHQL_ENDPOINT = 'http://localhost:8080/graphql';
-const client = ApolloClient(SERVICE_PERFORMANCE_URL);
+const client = ApolloClient(GRAPHQL_ENDPOINT);
 ```
