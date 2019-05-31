@@ -1,6 +1,5 @@
 const { ApolloClient } = require('apollo-client');
 const { InMemoryCache } = require('apollo-cache-inmemory');
-const { HttpLink } = require('apollo-link-http');
 const { onError } = require('apollo-link-error');
 const { ApolloLink, split } = require('apollo-link');
 const { createUploadLink } = require('apollo-upload-client');
@@ -38,13 +37,6 @@ module.exports = function(uri) {
       if (networkError) console.log(`[Network error]: ${networkError}`);
     }),
     split(isUpload, uploadLink, batchLink),
-    // createUploadLink({
-    //   uri: `${window.HOST_URL}/graphql`,
-    //   credentials: 'include',
-    //   // headers: {
-    //   //   apolloclient: 1
-    //   // },
-    // }),
   ]);
   client = new ApolloClient({
     cache: new InMemoryCache(),
