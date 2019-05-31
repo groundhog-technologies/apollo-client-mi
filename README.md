@@ -2,7 +2,7 @@
 customized apollo client
 
 ## Useage
-Following example returns an apollo-client instance
+Following example returns an [apollo-client](https://github.com/apollographql/apollo-client) instance
 ```js
 import ApolloClient from 'mi-client';
 const GRAPHQL_ENDPOINT = 'http://localhost:8080/graphql';
