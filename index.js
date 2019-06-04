@@ -12,11 +12,7 @@ const isFile = value =>
 
 const isUpload = ({ variables }) => Object.values(variables).some(isFile);
 
-let client = null;
-
 module.exports = function(uri) {
-  if (client) return client;
-
   const options = {
     uri,
     credentials: 'include',
@@ -38,9 +34,8 @@ module.exports = function(uri) {
     }),
     split(isUpload, uploadLink, batchLink),
   ]);
-  client = new ApolloClient({
+  return new ApolloClient({
     cache: new InMemoryCache(),
     link,
   });
-  return client;
 };
