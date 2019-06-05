@@ -1,5 +1,5 @@
 const { ApolloClient } = require('apollo-client');
-const { InMemoryCache } = require('apollo-cache-inmemory');
+const { InMemoryCache, IntrospectionFragmentMatcher } = require('apollo-cache-inmemory');
 const { onError } = require('apollo-link-error');
 const { ApolloLink, split } = require('apollo-link');
 const { createUploadLink } = require('apollo-upload-client');
@@ -12,7 +12,10 @@ const isFile = value =>
 
 const isUpload = ({ variables }) => Object.values(variables).some(isFile);
 
-module.exports = function(uri) {
+module.exports = function({
+  uri,
+  introspectionQueryResultData,
+}) {
   const options = {
     uri,
     credentials: 'include',
@@ -20,6 +23,7 @@ module.exports = function(uri) {
   };
   const uploadLink = createUploadLink(options);
   const batchLink = new BatchHttpLink(options);
+
 
   const link = ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
@@ -34,8 +38,17 @@ module.exports = function(uri) {
     }),
     split(isUpload, uploadLink, batchLink),
   ]);
+
+  let fragmentMatcher;
+  if (introspectionQueryResultData) {
+    fragmentMatcher = new IntrospectionFragmentMatcher({
+      introspectionQueryResultData
+    });
+  }
+  const cache = fragmentMatcher ? new InMemoryCache({ fragmentMatcher }) : new InMemoryCache();
+
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache,
     link,
   });
 };
