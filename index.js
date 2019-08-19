@@ -52,7 +52,7 @@ module.exports = function({
   return new ApolloClient({
     cache,
     link,
-    resolvers,
-    typeDefs
+    ...(resolvers?{resolvers}:{}),
+    ...(typeDefs?{typeDefs}:{})
   });
 };
