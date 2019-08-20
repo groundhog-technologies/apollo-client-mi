@@ -15,6 +15,8 @@ const isUpload = ({ variables }) => Object.values(variables).some(isFile);
 module.exports = function({
   uri,
   introspectionQueryResultData,
+  resolvers,
+  typeDefs
 }) {
   const options = {
     uri,
@@ -50,5 +52,7 @@ module.exports = function({
   return new ApolloClient({
     cache,
     link,
+    ...(resolvers?{resolvers}:{}),
+    ...(typeDefs?{typeDefs}:{})
   });
 };
